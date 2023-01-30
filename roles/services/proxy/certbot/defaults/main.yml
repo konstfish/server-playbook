@@ -1,0 +1,6 @@
+---
+# defaults file for nginx-configuration
+
+cloudflare_api_key: xxx
+letsencrypt_email: xxx
+fqdn: xxx

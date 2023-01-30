@@ -1,0 +1,4 @@
+{% for url, value in fortigate_exporter_targets.items() %}
+"{{url}}":
+    token: {{value}}
+{% endfor %}

@@ -1,0 +1,52 @@
+---
+# tasks file for nginx-remote
+
+- name: Install nginx
+  apt:
+    name: nginx
+    state: present
+
+#- name: Copy www folder
+#  copy:
+#    src: www
+#    dest: /var
+#    directory_mode:  true
+#  become: true
+
+- name: Copy defaults configuration
+  copy:
+    src: default
+    dest: /etc/nginx/sites-enabled/default
+  notify: Restart nginx service
+
+- name: Template konst.fish configuration
+  template:
+    src: konst.fish.j2
+    dest: /etc/nginx/sites-enabled/konst.fish
+  notify: Restart nginx service
+
+- name: Template grafana.konst.fish configuration
+  template:
+    src: grafana.konst.fish.j2
+    dest: /etc/nginx/sites-enabled/grafana.konst.fish
+  notify: Restart nginx service
+
+- name: Template harbor.konst.fish configuration
+  template:
+    src: harbor.konst.fish.j2
+    dest: /etc/nginx/sites-enabled/harbor.konst.fish
+  notify: Restart nginx service
+
+- name: Template bitwarden.konst.fish configuration
+  template:
+    src: bitwarden.konst.fish.j2
+    dest: /etc/nginx/sites-enabled/bitwarden.konst.fish
+  notify: Restart nginx service
+
+- name: Template bonsai.konst.fish configuration
+  template:
+    src: bonsai.konst.fish.j2
+    dest: /etc/nginx/sites-enabled/bonsai.konst.fish
+  notify: Restart nginx service
+
+- meta: flush_handlers

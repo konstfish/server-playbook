@@ -1,0 +1,145 @@
+global:
+  scrape_interval:     30s
+  evaluation_interval: 20s
+
+# prometheus_rule_files.files
+# Load and evaluate rules in this file every 'evaluation_interval' seconds.
+rule_files:
+  - "/etc/prometheus/*.rules"
+
+#    static_configs:
+#        - labels:
+#            itsdone_service: "MONITORING_INTERNAL"
+
+alerting:
+  alertmanagers:
+  - scheme: http
+    static_configs:
+    - targets: 
+      - 'alertmanager:9093'
+
+scrape_configs:
+  - job_name: 'INTERNALS-blackbox-exporter'
+    scrape_interval: 15s
+    static_configs:
+        - targets:
+            - 'blackbox_exporter:9115'
+
+  - job_name: 'INTERNALS-Alertmanager'
+    scrape_interval: 15s
+    static_configs:
+        - targets:
+            - 'alertmanager:9093' # Alertmanager
+
+# http monitoring (blackbox_exporter)
+
+  - job_name: 'MONITORING-HTTP'
+    metrics_path: /probe
+    params:
+      module: [http_2xx]  # Look for a HTTP 200 response.
+    static_configs:
+      - labels:
+          itsdone_service: "MONITORING_HTTP"
+      - targets:
+#% for host in blackbox_http_monitoring_nodes %}
+#        - '{ host }}'
+#% endfor %}
+        - 'https://1.1.1.1'
+        - 'https://grafana.konst.fish'
+        - 'https://backend.works'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox_exporter:9115
+
+# linux monitoring (node_exporter)
+  - job_name: 'MONITORING-Linux-Oracle'
+    scrape_interval: 30s
+    static_configs:
+        - targets:
+{% for host in groups['oracle'] %}
+            - '{{ hostvars[host].ansible_host }}:9100'
+{% endfor %}
+    relabel_configs:
+{% for host in groups['oracle'] %}
+        - source_labels: [ __address__ ]
+          regex: '{{ hostvars[host].ansible_host }}:9100'
+          replacement: {{host}}:9100
+          target_label: instance
+{% endfor %}
+
+  - job_name: 'MONITORING-Linux-Local'
+    scrape_interval: 30s
+    static_configs:
+        - targets:
+{% for host in groups['optiplex'] %}
+            - '{{ hostvars[host].ansible_host }}:9100'
+{% endfor %}
+    relabel_configs:
+{% for host in groups['optiplex'] %}
+        - source_labels: [ __address__ ]
+          regex: '{{ hostvars[host].ansible_host }}:9100'
+          replacement: {{host}}:9100
+          target_label: instance
+{% endfor %}
+
+# docker monitoring (cAdvisor)
+  - job_name: 'MONITORING-Docker-Oracle'
+    scrape_interval: 15s
+    static_configs:
+        - targets:
+{% for host in groups['oracle'] %}
+            - '{{ hostvars[host].ansible_host }}:8080'
+{% endfor %}
+    relabel_configs:
+{% for host in groups['oracle'] %}
+        - source_labels: [ __address__ ]
+          regex: '{{ hostvars[host].ansible_host }}:8080'
+          replacement: {{host}}:8080
+          target_label: instance
+{% endfor %}
+
+  - job_name: 'MONITORING-Docker-Local'
+    scrape_interval: 15s
+    static_configs:
+        - targets:
+{% for host in groups['optiplex'] %}
+            - '{{ hostvars[host].ansible_host }}:8080'
+{% endfor %}
+    relabel_configs:
+{% for host in groups['optiplex'] %}
+        - source_labels: [ __address__ ]
+          regex: '{{ hostvars[host].ansible_host }}:8080'
+          replacement: {{host}}:8080
+          target_label: instance
+{% endfor %}
+
+# nginx
+  - job_name: 'MONITORING-Nginx'
+    scrape_interval: 15s
+    static_configs:
+      - targets: 
+        - nginx_exporter_local:9113
+        - nginx_exporter_remote:9113
+
+# fortigate
+  - job_name: 'MONITORING-Fortigate'
+    scrape_interval: 60s
+    scrape_timeout: 45s
+    metrics_path: /probe
+    static_configs:
+      - targets:
+{% for host, value in fortigate_exporter_targets.items() %}
+        - '{{ host }}'
+{% endfor %}
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+        regex: '(?:.+)(?::\/\/)(.*)'
+      - target_label: __address__
+        replacement: 'fortigate_exporter:9710'

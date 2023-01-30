@@ -1,0 +1,23 @@
+server {
+	listen 80;
+
+	deny all; # deny all remaining ips
+
+	root /var/www/html;
+
+	index index.html;
+
+	server_name _;
+
+	location / {
+		return 0;
+	}
+}
+
+server {
+	listen 8081;
+
+	location /metrics {
+        stub_status on;
+    }
+}

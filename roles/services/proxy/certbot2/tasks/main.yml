@@ -1,0 +1,25 @@
+---
+# tasks file for certbot
+
+- name: Get current certificate
+  community.crypto.get_certificate:
+    host: "harbor.percidae.io"
+    port: 443
+  run_once: true
+  register: cert
+  ignore_errors: true
+
+- name: Check how many days cert is still valid for
+  debug:
+    msg: "cert expires in: {{ expire_days }} days."
+  vars:
+    expire_days: "{{ (( cert.not_after | to_datetime('%Y%m%d%H%M%SZ')) - (ansible_date_time.iso8601 | to_datetime('%Y-%m-%dT%H:%M:%SZ')) ).days }}"
+
+
+- block:
+  - name: Run certbot
+    command: certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.ini --email '{{ letsencrypt_email }}' --domain '*.{{ fqdn }}' --agree-tos --non-interactive
+  
+  vars:
+    expire_days: "{{ (( cert.not_after | to_datetime('%Y%m%d%H%M%SZ')) - (ansible_date_time.iso8601 | to_datetime('%Y-%m-%dT%H:%M:%SZ')) ).days }}"
+  when: expire_days|int < 15

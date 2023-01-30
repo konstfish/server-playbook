@@ -1,0 +1,38 @@
+---
+# tasks file for cadvisor
+
+- name: Clone fortigate-exporter repo
+  ansible.builtin.git:
+    repo: https://github.com/bluecmd/fortigate_exporter
+    dest: /home/{{ user_name }}/docker/grafana-stack/fortigate-exporter
+    version: master
+
+- name: Template fortigate-exporter configuration
+  template:
+    src: "fortigate-key.yaml.j2"
+    dest: "/home/{{ user_name }}/docker/grafana-stack/fortigate-exporter/fortigate-key.yaml"
+
+#- name: Build fortigate-exporter container
+#  community.docker.docker_image:
+#    name: fortigate_exporter:latest
+#    build:
+#      path: /home/{{ user_name }}/docker/grafana-stack/fortigate-exporter
+#    source: build
+
+#- name: Install/Update fortigate-exporter
+#  docker_container:
+#    name: fortigate_exporter
+#    image: fortigate_exporter:latest
+#    state: started
+#    ports:
+#      - 9710:9710
+#    restart_policy: always
+#    volumes:
+#      - /home/{{ user_name }}/docker/grafana-stack/fortigate-exporter/fortigate-key.yaml:/config/fortigate-key.yaml
+#    command: >-
+#      --auth-file /config/fortigate-key.yaml -insecure
+
+#- name: Wait for the fortigate-exporter to become reachable
+#  wait_for:
+#    port: 9710
+#    delay: 5

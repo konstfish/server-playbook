@@ -1,0 +1,29 @@
+---
+# tasks file for bitwarden
+- name: Create bitwarden folder
+  file:
+    path: "/home/{{ user_name }}/docker/bitwarden"
+    state: directory
+
+- name: Create bwdata folder
+  file:
+    path: "/home/{{ user_name }}/docker/bitwarden/bwdata"
+    state: directory
+
+- name: Copy docker-compose file to target
+  copy:
+    src: "docker-compose.yml"
+    dest: "/home/{{ user_name }}/docker/bitwarden/docker-compose.yml"
+
+# rules & templates
+
+- name: Copy nginx configuration
+  copy:
+    src: nginx.conf
+    dest: "/home/{{ user_name }}/docker/bitwarden/nginx.conf"
+
+- name: Deploy bitwarden
+  docker_compose:
+    project_src: /home/{{ user_name }}/docker/bitwarden
+    state: present
+    pull: true

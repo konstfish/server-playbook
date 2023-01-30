@@ -1,0 +1,9 @@
+collections:
+  - name: community.general
+
+roles:
+  - name: 'geerlingguy.docker'
+    version: '4.1.0'
+
+  - name: 'cloudalchemy.node_exporter'
+    version: '2.0.0'

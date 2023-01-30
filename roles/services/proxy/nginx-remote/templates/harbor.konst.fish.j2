@@ -1,0 +1,19 @@
+server
+  {
+    listen 80;
+    server_name harbor.konst.fish;
+    return 301	https://harbor.konst.fish$request_uri;
+  }
+
+  server
+  {
+    listen 443;
+    server_name harbor.konst.fish;
+    ssl on;
+    ssl_certificate /etc/letsencrypt/live/konst.fish/fullchain.pem;
+    ssl_certificate_key	/etc/letsencrypt/live/konst.fish/privkey.pem;
+    location /
+    {
+      proxy_pass http://10.0.2.70:9000/;
+    }
+  }

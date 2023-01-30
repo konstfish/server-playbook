@@ -1,0 +1,64 @@
+---
+
+- name: Oracle-pre
+  hosts: oracle
+  serial: 10
+  roles:
+    - setup/basic-setup-oracle
+
+- name: Main
+  hosts: all
+  serial: 10
+  roles:
+    - geerlingguy.docker
+    - setup/basic-setup
+
+    - cloudalchemy.node_exporter
+    - monitoring/exporters/cadvisor
+    - bonsai/bonsai-exporter
+
+- name: Monitoring-Bonsai
+  hosts: kf-orc-arm-02
+  serial: 10
+  roles:
+    - bonsai/bonsai-stack
+
+- name: Monitoring
+  hosts: kf-orc-arm-01
+  serial: 10
+  roles:
+    - monitoring/grafana-stack
+    - monitoring/portainer
+
+- name: Web-remote
+  hosts: kf-orc-arm-01
+  serial: 10
+  roles:
+  #  - services/proxy/certbot
+    - services/proxy/nginx-remote
+
+- name: Web-local
+  hosts: kf-opt-salmon-01
+  serial: 10
+  roles:
+    - services/proxy/nginx-local
+
+- name: Bitwarden
+  hosts: kf-orc-amd-02
+  serial: 10
+  roles:
+    - services/bitwarden
+
+- name: Media
+  hosts: kf-opt-salmon-01
+  serial: 10
+  roles:
+  #  - services/media/plex
+    - services/media/jellyfin
+
+
+- name: Medfish
+  hosts: kf-opt-tuna-01
+  serial: 10
+  roles:
+    - services/media/medfish

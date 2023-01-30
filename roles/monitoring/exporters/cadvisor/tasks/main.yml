@@ -1,0 +1,47 @@
+---
+# tasks file for cadvisor
+
+- name: Install/Update cadvisor (x86)
+  docker_container:
+    name: cadvisor
+    image: gcr.io/cadvisor/cadvisor:latest
+    state: started
+    pull: true
+    privileged: true
+    ports:
+      - 8080:8080
+    restart_policy: always
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    devices:
+      - /dev/kmsg
+  when: ansible_architecture == "x86_64"
+
+#ansible_architecture
+#- name: Print the gateway for each host when defined
+#  ansible.builtin.debug:
+#    msg: System {{ ansible_architecture }} 
+
+- name: Install/Update cadvisor (arm64/aarch64)
+  docker_container:
+    name: cadvisor
+    image: gcr.io/cadvisor/cadvisor-arm64:v0.47.0
+    state: started
+    pull: true
+    privileged: true
+    ports:
+      - 8080:8080
+    restart_policy: always
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    devices:
+      - /dev/kmsg
+  when: ansible_architecture == "arm64" or ansible_architecture == "aarch64"

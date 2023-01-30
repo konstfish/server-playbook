@@ -1,0 +1,57 @@
+---
+
+- name: Create grafana-stack folder
+  file:
+    path: "/home/{{ user_name }}/docker/grafana-stack"
+    state: directory
+
+- name: Template docker-compose file
+  template:
+    src: "docker-compose.yml.j2"
+    dest: "/home/{{ user_name }}/docker/grafana-stack/docker-compose.yml"
+
+# folders
+- name: Create Prometheus config & rule folder
+  file:
+    path: "/home/{{ user_name }}/docker/grafana-stack/prometheus"
+    state: directory
+
+- name: Create Alertmanager config folder
+  file:
+    path: "/home/{{ user_name }}/docker/grafana-stack/alertmanager"
+    state: directory
+
+- name: Create Grafana provisioning folder
+  file:
+    path: "/home/{{ user_name }}/docker/grafana-stack/grafana/provisioning"
+    state: directory
+
+# rules & templates
+
+- name: Copy Prometheus rule files to target
+  copy:
+    src: "prometheus/"
+    dest: "/home/{{ user_name }}/docker/grafana-stack/prometheus/"
+
+- name: Copy Grafana Provisioning to target
+  copy:
+    src: "grafana/provisioning"
+    dest: "/home/{{ user_name }}/docker/grafana-stack/grafana/"
+
+- name: Template Prometheus configuration
+  template:
+    src: "prometheus.yml.j2"
+    dest: "/home/{{ user_name }}/docker/grafana-stack/prometheus/prometheus.yml"
+
+- name: Template Alertmanager configuration
+  template:
+    src: "alertmanager.yml.j2"
+    dest: "/home/{{ user_name }}/docker/grafana-stack/alertmanager/config.yml"
+
+- name: Deploy grafana-stack
+  docker_compose:
+    project_src: /home/{{ user_name }}/docker/grafana-stack
+    state: present
+    pull: true
+    recreate: smart
+    restarted: true

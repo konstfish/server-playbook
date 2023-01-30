@@ -1,0 +1,27 @@
+# ansible
+ansible_user: ubuntu
+ansible_ssh_private_key_file: /Users/david/.ssh/id_ansible
+
+# setup
+user_name: david
+github_user: konstfish
+
+# cloudflare
+cloudflare_api_key: xxx
+letsencrypt_email: xxx
+fqdn: xxx
+
+# grafana
+grafana_admin_password: xxx
+
+# alertmanager
+alertmanager_telegram_token: xxx
+alertmanager_telegram_chatid: xxx
+
+# fortigate exporter
+fortigate_exporter_targets:
+  https://fortigate: xxx
+
+# nordvpn (for medfish)
+nordvpn_user: xxx
+nordvpn_password: xxx

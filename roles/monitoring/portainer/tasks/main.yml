@@ -1,0 +1,22 @@
+---
+# tasks file for portainer
+
+- name: Create /home/{{ user_name }}/docker/portainer/data
+  file: 
+    path: /home/{{ user_name }}/docker/portainer/data
+    state: directory
+    recurse: yes
+
+- name: Install/Update portainer
+  docker_container:
+    name: portainer
+    image: portainer/portainer-ce:latest
+    state: started
+    pull: true
+    ports:
+      - 9443:9443
+      - 9000:9000
+    restart_policy: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /home/{{ user_name }}/docker/portainer/data:/data

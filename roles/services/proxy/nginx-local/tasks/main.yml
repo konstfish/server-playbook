@@ -1,0 +1,46 @@
+---
+# tasks file for basic-setup
+
+- name: Install nginx
+  apt:
+    name: nginx
+    state: present
+
+- name: Copy lestencrypt certs to remote
+  copy:  
+    src: buffer/letsencrypt
+    dest: /etc/
+  when: inventory_hostname == 'kf-opt-salmon-01'
+
+#- name: Copy www folder
+#  copy:
+#    src: www
+#    dest: /var
+#    directory_mode:  true
+#  become: true
+
+- name: Copy defaults configuration
+  copy:
+    src: default
+    dest: /etc/nginx/sites-enabled/default
+  notify: Restart nginx service
+
+- name: Template s.konst.fish configuration
+  template:
+    src: s.konst.fish.j2
+    dest: /etc/nginx/sites-enabled/s.konst.fish
+  notify: Restart nginx service
+
+- name: Template jellyfin.konst.fish configuration
+  template:
+    src: jellyfin.konst.fish.j2
+    dest: /etc/nginx/sites-enabled/jellyfin.konst.fish
+  notify: Restart nginx service
+
+- name: Template plex.konst.fish configuration
+  template:
+    src: plex.konst.fish.j2
+    dest: /etc/nginx/sites-enabled/plex.konst.fish
+  notify: Restart nginx service
+
+- meta: flush_handlers

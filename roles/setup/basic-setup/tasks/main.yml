@@ -1,0 +1,151 @@
+---
+# tasks file for basic-setup
+#- name: Apt Update
+#  apt:
+#    update_cache: "yes"
+
+- name: Install python3-pip
+  apt:
+    name: python3-pip
+    state: present
+
+- name: Install docker-compose Python package
+  pip:
+    name: docker-compose
+
+- name: Install Docker Python package
+  pip:
+    name: docker
+
+- name: Install zsh
+  apt:
+    name: zsh
+    state: present
+
+- name: Install nfs-common
+  apt:
+    name: nfs-common
+    state: present
+
+- name: Install cifs-utils
+  apt:
+    name: cifs-utils
+    state: present
+
+#- name: Get username
+#  command: whoami
+#  register: task
+#  changed_when: false
+# {{ task.stdout }}
+
+# wheel
+- name: Make sure we have a 'wheel' group
+  group:
+    name: wheel
+    state: present
+
+- name: Allow 'wheel' group to have passwordless sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: "^%wheel"
+    line: "%wheel ALL=(ALL) NOPASSWD: ALL"
+    validate: "visudo -cf %s"
+
+- name: Add the user {{ user_name }}
+  user:
+    name: "{{ user_name }}"
+    shell: /bin/zsh
+    groups: sudo,docker,wheel
+    append: yes
+
+- name: Set login shell of user {{ user_name }} to `/bin/zsh` with `usermod`
+  command: usermod --shell /bin/zsh {{ user_name }}
+  become: true
+  changed_when: false
+
+- name: Set login shell of user root to `/bin/zsh` with `usermod`
+  command: usermod --shell /bin/zsh root
+  become: true
+  changed_when: false
+
+- name: Set SSH key for {{ user_name }} from GitHub
+  authorized_key:
+    user: "{{ user_name }}"
+    state: present
+    key: https://github.com/{{ github_user }}.keys
+
+#- name: Install "spaceship-prompt" node.js package
+#  become: true
+#  become_user: "{{ user_name }}"
+#  npm:
+#    name: spaceship-prompt
+#    path: /home/{{ user_name }}/.npm/spaceship-prompt
+
+# zsh 
+- name: Create .zsh directory for {{ user_name }}
+  file:
+    path: /home/{{ user_name }}/.zsh
+    state: directory
+
+- name: Clone spaceship-prompt repo for {{ user_name }}
+  ansible.builtin.git:
+    repo: https://github.com/spaceship-prompt/spaceship-prompt.git
+    dest: /home/{{ user_name }}/.zsh/spaceship
+    version: master
+    depth: 1
+
+- name: Add spaceship-prompt to zshrc for {{ user_name }}
+  ansible.builtin.lineinfile:
+    path: /home/{{ user_name }}/.zshrc
+    line: source "$HOME/.zsh/spaceship/spaceship.zsh"
+    create: yes
+
+# zsh root
+- name: Create .zsh directory for root
+  file:
+    path: /root/.zsh
+    state: directory
+
+- name: Clone spaceship-prompt repo for root
+  ansible.builtin.git:
+    repo: https://github.com/spaceship-prompt/spaceship-prompt.git
+    dest: /root/.zsh/spaceship
+    version: master
+    depth: 1
+
+- name: Add spaceship-prompt to zshrc for root
+  ansible.builtin.lineinfile:
+    path: /root/.zshrc
+    line: source "$HOME/.zsh/spaceship/spaceship.zsh"
+    create: yes
+
+# docker
+- name: Change Docker Service
+  lineinfile: 
+    path: /lib/systemd/system/docker.service
+    regexp: '^(.*)ExecStart(.*)$' 
+    line: 'ExecStart=/usr/bin/dockerd -H fd:// -H tcp://0.0.0.0:2375 --containerd=/run/containerd/containerd.sock'
+    backrefs: yes
+  register: docker_change_result
+
+- name: Print variable
+  debug:
+    msg: "The value of the variable is {{ docker_change_result.changed }}"
+
+- name: Restart Docker Service
+  systemd:
+    name: "docker"
+    daemon_reload: yes
+    state: restarted
+  when: docker_change_result.changed
+
+# nfs
+- name: Mount NFS Share
+  ansible.posix.mount:
+    src: 10.0.1.1:/mnt/md0/stor
+    path: /stor
+    opts: rw,bg,hard,nointr,rsize=32768,wsize=32768,tcp,timeo=600
+    state: mounted
+    fstype: nfs
+  when: inventory_hostname in groups.get('optiplex', [])

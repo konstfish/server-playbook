@@ -1,0 +1,97 @@
+version: '3.9'
+
+volumes:
+    prometheus_data: {}
+    grafana_data: {}
+
+services:
+
+  grafana:
+    image: grafana/grafana:latest
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD={{ grafana_admin_password }}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    links: 
+      - prometheus
+      - alertmanager
+    labels:
+      org.label-schema.group: "monitoring"
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    links: 
+      - blackbox_exporter
+      - alertmanager
+      - nginx_exporter_local
+      - nginx_exporter_remote
+      - fortigate_exporter
+    labels:
+      org.label-schema.group: "monitoring"
+
+  alertmanager:
+    image: prom/alertmanager:latest
+    volumes:
+      - ./alertmanager:/etc/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
+    restart: unless-stopped
+    ports:
+      - "9093:9093"
+    labels:
+      org.label-schema.group: "monitoring"
+
+  blackbox_exporter:
+    image: prom/blackbox-exporter:latest
+    restart: unless-stopped
+    ports:
+      - "9115:9115"
+    labels:
+      org.label-schema.group: "monitoring"
+
+  nginx_exporter_remote:
+    image: nginx/nginx-prometheus-exporter:latest
+    command: -nginx.scrape-uri=http://10.0.2.70:8081/metrics -web.telemetry-path=/metrics
+    restart: unless-stopped
+    labels:
+      org.label-schema.group: "monitoring"
+
+  nginx_exporter_local:
+    image: nginx/nginx-prometheus-exporter:latest
+    command: -nginx.scrape-uri=http://10.0.1.10:8081/metrics -web.telemetry-path=/metrics
+    restart: unless-stopped
+    labels:
+      org.label-schema.group: "monitoring"
+
+  fortigate_exporter:
+    build:
+      context: /home/{{ user_name }}/docker/grafana-stack/fortigate-exporter
+      dockerfile: Dockerfile
+    ports:
+      - 9710:9710
+    restart: unless-stopped
+    volumes:
+      - /home/{{ user_name }}/docker/grafana-stack/fortigate-exporter/fortigate-key.yaml:/config/fortigate-key.yaml
+    command: ["-auth-file", "/config/fortigate-key.yaml", "-insecure"]
+    labels:
+      org.label-schema.group: "monitoring"

@@ -1,0 +1,20 @@
+---
+# tasks file for jellyfin
+
+- name: Create jellyfin folder
+  file:
+    path: "/home/{{ user_name }}/docker/jellyfin"
+    state: directory
+
+- name: Template docker-compose file
+  template:
+    src: docker-compose.yml.j2
+    dest: /home/{{ user_name }}/docker/jellyfin/docker-compose.yml
+
+- name: Deploy jellyfin stack
+  docker_compose:
+    project_src: /home/{{ user_name }}/docker/jellyfin
+    state: present
+    pull: true
+    #restarted: true
+
