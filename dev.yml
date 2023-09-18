@@ -1,15 +1,8 @@
 ---
 
-- name: Main
-  hosts: all
+- name: Web-local
+  hosts: kf-opt-salmon-01
   serial: 10
   roles:
-    - geerlingguy.docker
-    - bonsai/bonsai-exporter
-
-- name: Web-remote
-  hosts: kf-orc-arm-02
-  serial: 10
-  roles:
-    - bonsai/bonsai-stack
-    - bonsai/bonsai-exporter
+  #  - services/proxy/nginx-local
+    - services/streaks-api

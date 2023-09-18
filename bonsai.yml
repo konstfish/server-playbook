@@ -1,15 +1,13 @@
 ---
 
-- name: Main
-  hosts: all
-  serial: 10
-  roles:
-    - geerlingguy.docker
-    - bonsai/bonsai-exporter
-
-- name: Web-remote
+- name: Bonsai-Stack
   hosts: kf-orc-arm-02
   serial: 10
   roles:
     - bonsai/bonsai-stack
+
+- name: Bonsai-Exporter
+  hosts: all
+  serial: 10
+  roles:
     - bonsai/bonsai-exporter

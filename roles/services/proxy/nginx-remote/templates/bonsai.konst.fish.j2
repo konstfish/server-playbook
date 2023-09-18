@@ -17,6 +17,9 @@
     proxy_set_header Host $http_host; 
     location /
     {
+      auth_basic           "Credentials in INTRODUCTION.md";
+      auth_basic_user_file /etc/nginx/.htpasswd;
+
       proxy_pass http://10.0.2.71:3000/;
     }
   }

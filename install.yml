@@ -1,5 +1,25 @@
 ---
 
+- name: Bitwarden
+  hosts: kf-orc-amd-02
+  serial: 10
+  roles:
+    - services/bitwarden
+
+#- name: Media
+#  hosts: kf-opt-salmon-01
+#  serial: 10
+#  roles:
+  #  - services/media/plex
+  #  - services/media/jellyfin
+
+
+- name: Medfish
+  hosts: kf-opt-tuna-01
+  serial: 10
+  roles:
+    - services/media/medfish
+
 - name: Oracle-pre
   hosts: oracle
   serial: 10
@@ -34,31 +54,14 @@
   hosts: kf-orc-arm-01
   serial: 10
   roles:
-  #  - services/proxy/certbot
+    - services/proxy/cloudflare-dns
+    - services/proxy/certbot
     - services/proxy/nginx-remote
 
 - name: Web-local
   hosts: kf-opt-salmon-01
   serial: 10
   roles:
+    - services/proxy/cloudflare-dns
     - services/proxy/nginx-local
-
-- name: Bitwarden
-  hosts: kf-orc-amd-02
-  serial: 10
-  roles:
-    - services/bitwarden
-
-- name: Media
-  hosts: kf-opt-salmon-01
-  serial: 10
-  roles:
-  #  - services/media/plex
-    - services/media/jellyfin
-
-
-- name: Medfish
-  hosts: kf-opt-tuna-01
-  serial: 10
-  roles:
-    - services/media/medfish
+    - services/streaks-api

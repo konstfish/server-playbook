@@ -11,6 +11,7 @@
     src: buffer/letsencrypt
     dest: /etc/
   when: inventory_hostname == 'kf-opt-salmon-01'
+  notify: Restart nginx service
 
 #- name: Copy www folder
 #  copy:
@@ -35,6 +36,18 @@
   template:
     src: jellyfin.konst.fish.j2
     dest: /etc/nginx/sites-enabled/jellyfin.konst.fish
+  notify: Restart nginx service
+
+- name: Template home.konst.fish configuration
+  template:
+    src: home.konst.fish.j2
+    dest: /etc/nginx/sites-enabled/home.konst.fish
+  notify: Restart nginx service
+
+- name: Template obsidian.konst.fish configuration
+  template:
+    src: obsidian.konst.fish.j2
+    dest: /etc/nginx/sites-enabled/obsidian.konst.fish
   notify: Restart nginx service
 
 - name: Template plex.konst.fish configuration

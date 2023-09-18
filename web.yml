@@ -1,0 +1,17 @@
+---
+
+- name: Web-remote
+  hosts: kf-orc-arm-01
+  serial: 10
+  roles:
+    - services/proxy/cloudflare-dns
+    - services/proxy/certbot
+    - services/proxy/nginx-remote
+
+- name: Web-local
+  hosts: kf-opt-salmon-01
+  serial: 10
+  roles:
+    - services/proxy/cloudflare-dns
+    - services/proxy/nginx-local
+#    - services/streaks-api

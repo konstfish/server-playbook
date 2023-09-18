@@ -46,7 +46,7 @@ scrape_configs:
 #% endfor %}
         - 'https://1.1.1.1'
         - 'https://grafana.konst.fish'
-        - 'https://backend.works'
+#        - 'https://backend.works'
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target

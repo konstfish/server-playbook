@@ -106,23 +106,23 @@ groups:
       summary: Host unusual disk read latency (instance {{ $labels.instance }})
       description: "Disk latency is growing (read operations > 100ms)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
-  - alert: HostUnusualDiskWriteLatency
-    expr: rate(node_disk_write_time_seconds_total[1m]) / rate(node_disk_writes_completed_total[1m]) > 0.1 and rate(node_disk_writes_completed_total[1m]) > 0
-    for: 2m
-    labels:
-      severity: warning
-    annotations:
-      summary: Host unusual disk write latency (instance {{ $labels.instance }})
-      description: "Disk latency is growing (write operations > 100ms)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+#  - alert: HostUnusualDiskWriteLatency
+#    expr: rate(node_disk_write_time_seconds_total[1m]) / rate(node_disk_writes_completed_total[1m]) > 0.1 and rate(node_disk_writes_completed_total[1m]) > 0
+#    for: 2m
+#    labels:
+#      severity: warning
+#    annotations:
+#      summary: Host unusual disk write latency (instance {{ $labels.instance }})
+#      description: "Disk latency is growing (write operations > 100ms)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
-  - alert: HostHighCpuLoad
-    expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle", instance!="kf-opt-salmon-01:9100"}[2m])) * 100) > 80
-    for: 0m
-    labels:
-      severity: warning
-    annotations:
-      summary: Host high CPU load (instance {{ $labels.instance }})
-      description: "CPU load is > 80%\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+#  - alert: HostHighCpuLoad
+#    expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle", instance!="kf-opt-salmon-01:9100"}[2m])) * 100) > 80
+#    for: 0m
+#    labels:
+#       severity: warning
+#    annotations:
+#      summary: Host high CPU load (instance {{ $labels.instance }})
+#      description: "CPU load is > 80%\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
   - alert: HostCpuStealNoisyNeighbor
     expr: avg by(instance) (rate(node_cpu_seconds_total{mode="steal"}[5m])) * 100 > 10
@@ -134,7 +134,7 @@ groups:
       description: "CPU steal is > 10%. A noisy neighbor is killing VM performances or a spot instance may be out of credit.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
   - alert: HostCpuHighIowait
-    expr: avg by (instance) (rate(node_cpu_seconds_total{mode="iowait"}[5m])) * 100 > 5
+    expr: avg by (instance) (rate(node_cpu_seconds_total{mode="iowait", instance!~"kf-opt.*:9100"}[5m])) * 100 > 5
     for: 0m
     labels:
       severity: warning

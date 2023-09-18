@@ -12,3 +12,9 @@ monitoring:
 
 bonsai:
 	ansible-playbook -i inventory/hosts.yml -b bonsai.yml
+
+web:
+	ansible-playbook -i inventory/hosts.yml -b web.yml
+
+setup:
+	ansible-playbook -i inventory/hosts.yml -b setup.yml

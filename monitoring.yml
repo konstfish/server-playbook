@@ -6,4 +6,4 @@
   roles:
     - monitoring/exporters/fortigate-exporter
     - monitoring/grafana-stack
-    - monitoring/portainer
+

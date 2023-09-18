@@ -13,6 +13,8 @@ services:
       - OPENVPN_PROVIDER=NORDVPN
       - OPENVPN_USERNAME={{ nordvpn_user }}
       - OPENVPN_PASSWORD={{ nordvpn_password }}
+      - NORDVPN_CATEGORY=legacy_p2p
+      - NORDVPN_PROTOCOL=udp
       - WEBPROXY_ENABLED=false
       - LOCAL_NETWORK=10.0.0.0/16
       - TRANSMISSION_ALT_SPEED_DOWN=10000

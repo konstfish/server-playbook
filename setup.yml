@@ -1,0 +1,14 @@
+---
+
+- name: Oracle-pre
+  hosts: oracle
+  serial: 10
+  roles:
+    - setup/basic-setup-oracle
+
+- name: Main
+  hosts: all
+  serial: 10
+  roles:
+    - geerlingguy.docker
+    - setup/basic-setup

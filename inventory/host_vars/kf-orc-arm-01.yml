@@ -1,3 +1,17 @@
 #allow_ports: 
 #  - 3000
 #  - 9090
+
+cloudflare_record_list:
+  - record: bitwarden.konst.fish
+    proxied: false
+  - record: bonsai.konst.fish
+    proxied: false
+  - record: grafana.konst.fish
+    proxied: false
+  - record: harbor.konst.fish
+    proxied: false
+  - record: nfc.konst.fish
+    proxied: false
+
+cloudflare_custom_record_list: []

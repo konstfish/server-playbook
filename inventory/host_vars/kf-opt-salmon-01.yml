@@ -1,0 +1,26 @@
+
+cloudflare_record_list:
+  - record: home.konst.fish
+    proxied: false
+  - record: jellyfin.konst.fish
+    proxied: false
+  - record: plex.konst.fish
+    proxied: false
+  - record: nas.konst.fish
+    proxied: false
+  - record: obsidian.konst.fish
+    proxied: false
+  - record: s.konst.fish
+    proxied: true
+  - record: vpn.konst.fish
+    proxied: false
+
+cloudflare_custom_record_list:
+  - record: konst.fish
+    type: CNAME
+    value: konstfish.github.io
+    proxied: true
+  - record: blog.konst.fish
+    type: CNAME
+    value: konstfish.github.io
+    proxied: true

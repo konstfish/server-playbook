@@ -1,0 +1,18 @@
+---
+# defaults file for cloudflare-dns
+
+cloudflare_zone: xxx
+cloudflare_api_key: xxx
+cloudflare_account_email: xxx
+
+cloudflare_record_list:
+  - record: xxx.xx
+    proxied: false
+  - record: xxx.xx
+    proxied: true
+
+cloudflare_custom_record_list:
+  - record: xxx
+    type: A
+    value: xxx
+    proxied: false
