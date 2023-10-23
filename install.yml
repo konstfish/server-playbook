@@ -44,11 +44,18 @@
     - bonsai/bonsai-stack
 
 - name: Monitoring
+  hosts: kf-orc-arm-02
+  serial: 10
+  roles:
+    - monitoring/exporters/fortigate-exporter
+    - monitoring/grafana-stack
+
+- name: Monitoring
   hosts: kf-orc-arm-01
   serial: 10
   roles:
-    - monitoring/grafana-stack
-    - monitoring/portainer
+#    - monitoring/portainer
+    - services/supabase
 
 - name: Web-remote
   hosts: kf-orc-arm-01

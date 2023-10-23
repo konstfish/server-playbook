@@ -13,9 +13,16 @@
   pip:
     name: docker-compose
 
+- name: Install docker-composeer Python package
+  pip:
+    name: docker-composer
+    extra_args: --upgrade
+
+
 - name: Install Docker Python package
   pip:
     name: docker
+    extra_args: --upgrade
 
 - name: Install zsh
   apt:

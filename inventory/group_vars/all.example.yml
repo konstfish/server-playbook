@@ -6,6 +6,10 @@ ansible_ssh_private_key_file: /Users/david/.ssh/id_ansible
 user_name: david
 github_user: konstfish
 
+# docker
+docker_install_compose: true
+docker_compose_version: "v2.23.0"
+
 # cloudflare
 cloudflare_api_key: xxx
 letsencrypt_email: xxx

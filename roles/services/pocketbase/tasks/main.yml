@@ -1,0 +1,23 @@
+---
+# tasks file for pocketbase
+- name: Create pocketbase folder
+  file:
+    path: "/home/{{ user_name }}/docker/pocketbase/{{ pocketbase_name }}"
+    state: directory
+
+
+- name: Template Dockerfile
+  template:
+    src: "Dockerfile.j2"
+    dest: "/home/{{ user_name }}/docker/pocketbase/{{ pocketbase_name }}/Dockerfile"
+
+- name: Template Dockerfile
+  template:
+    src: "docker-compose.yml.j2"
+    dest: "/home/{{ user_name }}/docker/pocketbase/{{ pocketbase_name }}/docker-compose.yml"
+
+- name: Deploy pocketbase
+  docker_compose:
+    project_src: /home/{{ user_name }}/docker/pocketbase/{{ pocketbase_name }}
+    state: present
+    build: true

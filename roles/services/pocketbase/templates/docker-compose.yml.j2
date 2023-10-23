@@ -1,0 +1,16 @@
+version: "3.7"
+services:
+  pocketbase:
+    build: .
+    container_name: pocketbase_{{ pocketbase_name }}
+    restart: unless-stopped
+    ports:
+      - "{{ pocketbase_port }}:8080"
+    volumes:
+      - ./pb_data:/pb/pb_data
+      - ./pb_public:/pb/pb_public
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:8090/api/health || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 5

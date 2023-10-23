@@ -13,5 +13,9 @@ cloudflare_record_list:
     proxied: false
   - record: nfc.konst.fish
     proxied: false
+  - record: api.konst.fish
+    proxied: false
+  - record: api.sudoku.konst.fish
+    proxied: false
 
 cloudflare_custom_record_list: []

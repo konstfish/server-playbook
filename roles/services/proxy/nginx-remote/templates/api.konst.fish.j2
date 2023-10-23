@@ -1,0 +1,50 @@
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    '' close;
+}
+
+server
+{
+  listen 80;
+  server_name api.konst.fish;
+  return 301  https://api.konst.fish$request_uri;
+}
+
+server
+{
+  listen 443;
+  server_name api.konst.fish;
+
+  ssl on;
+  ssl_certificate /etc/letsencrypt/live/konst.fish/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/konst.fish/privkey.pem;
+  
+  # REST
+  location ~ ^/rest/v1/(.*)$ {
+      proxy_set_header Host $host;
+      proxy_pass http://10.0.2.70:8000;
+      proxy_redirect off;
+  }
+
+  # AUTH
+  location ~ ^/auth/v1/(.*)$ {
+      proxy_set_header Host $host;
+      proxy_pass http://10.0.2.70:8000;
+      proxy_redirect off;
+  }
+
+  # REALTIME
+  location ~ ^/realtime/v1/(.*)$ {
+      proxy_redirect off;
+      proxy_pass http://10.0.2.70:8000;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection $connection_upgrade;
+      proxy_set_header Host $host;
+  }
+  # STUDIO
+  location / {
+      proxy_set_header Host $host;
+      proxy_pass http://10.0.2.70:8000;
+  }
+}

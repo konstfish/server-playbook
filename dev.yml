@@ -1,8 +1,9 @@
 ---
 
-- name: Web-local
-  hosts: kf-opt-salmon-01
+- name: Monitoring
+  hosts: kf-orc-arm-01
   serial: 10
   roles:
-  #  - services/proxy/nginx-local
-    - services/streaks-api
+    - role: services/pocketbase
+      pocketbase_name: "sudoku"
+    - services/proxy/nginx-remote

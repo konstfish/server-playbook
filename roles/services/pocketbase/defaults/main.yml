@@ -1,0 +1,5 @@
+---
+# defaults file for nginx-configuration
+pocketbase_name: pocketbase
+pocketbase_port: 8082
+pocketbase_version: 0.19.0

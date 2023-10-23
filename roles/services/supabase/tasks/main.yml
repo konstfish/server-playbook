@@ -1,0 +1,38 @@
+---
+# tasks file for supabase
+- name: Clone or pull a Git repository
+  block:
+    - name: Check if the repository exists
+      stat:
+        path: /home/{{ user_name }}/docker/supabase
+      register: repo_status
+
+    - name: Clone the repository if it doesn't exist
+      git:
+        repo: https://github.com/supabase/supabase.git
+        dest: /home/{{ user_name }}/docker/supabase
+      when: not repo_status.stat.exists
+
+    - name: Pull the latest changes if the repository exists
+      git:
+        repo: https://github.com/supabase/supabase.git
+        dest: /home/{{ user_name }}/docker/supabase
+      when: repo_status.stat.exists
+
+- name: Template env file
+  template:
+    src: ".env.j2"
+    dest: "/home/{{ user_name }}/docker/supabase/docker/.env"
+
+- name: Pull Supabase Docker images
+  command: "docker compose -f /home/{{ user_name }}/docker/supabase/docker/docker-compose.yml pull"
+
+- name: Deploy supabase
+  command: "docker compose -f /home/{{ user_name }}/docker/supabase/docker/docker-compose.yml up -d"
+
+# docker compose v2 has no support for ansible yet
+#- name: Deploy supabase
+#  docker_compose:
+#    project_src: /home/{{ user_name }}/docker/supabase/docker
+#    state: present
+#    pull: true

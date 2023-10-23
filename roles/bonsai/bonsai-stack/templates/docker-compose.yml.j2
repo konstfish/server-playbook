@@ -41,7 +41,7 @@ services:
       - "socket"
     build: ./bonsai_frontend/
     ports:
-      - 3000:3000
+      - 3001:3000
     links:
       - "socket:socket"
       - "server:server"
