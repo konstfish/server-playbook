@@ -55,7 +55,8 @@
   serial: 10
   roles:
 #    - monitoring/portainer
-    - services/supabase
+    - role: services/pocketbase
+      pocketbase_name: "sudoku"
 
 - name: Web-remote
   hosts: kf-orc-arm-01
@@ -63,6 +64,7 @@
   roles:
     - services/proxy/cloudflare-dns
     - services/proxy/certbot
+    - services/proxy/fail2ban
     - services/proxy/nginx-remote
 
 - name: Web-local
@@ -71,4 +73,5 @@
   roles:
     - services/proxy/cloudflare-dns
     - services/proxy/nginx-local
+    - services/proxy/fail2ban
     - services/streaks-api

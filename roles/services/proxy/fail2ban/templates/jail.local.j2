@@ -1,0 +1,22 @@
+[DEFAULT]
+ignoreip = 127.0.0.1/8 10.0.0.0/8 92.62.26.112
+
+[nginx-http-auth]
+enabled  = true
+filter   = nginx-http-auth
+port     = http,https
+logpath  = /var/log/nginx/error.log
+
+[nginx-404]
+enabled  = true
+filter   = nginx-404
+port     = http,https
+logpath  = /var/log/nginx/access.log
+maxretry = 100
+
+[nginx-403]
+enabled  = true
+filter   = nginx-403
+port     = http,https
+logpath  = /var/log/nginx/error.log
+maxretry = 40

@@ -6,8 +6,6 @@ cloudflare_record_list:
     proxied: false
   - record: plex.konst.fish
     proxied: false
-  - record: nas.konst.fish
-    proxied: false
   - record: obsidian.konst.fish
     proxied: false
   - record: s.konst.fish

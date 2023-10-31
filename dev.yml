@@ -1,9 +1,14 @@
 ---
 
-- name: Monitoring
+- name: Web-remote
   hosts: kf-orc-arm-01
   serial: 10
   roles:
-    - role: services/pocketbase
-      pocketbase_name: "sudoku"
-    - services/proxy/nginx-remote
+    - services/proxy/fail2ban
+
+- name: Web-local
+  hosts: kf-opt-salmon-01
+  serial: 10
+  roles:
+    - services/proxy/fail2ban
+    

@@ -125,6 +125,14 @@ scrape_configs:
         - nginx_exporter_local:9113
         - nginx_exporter_remote:9113
 
+# fail2ban
+  - job_name: 'MONITORING-fail2ban'
+    scrape_interval: 30s
+    static_configs:
+      - targets: 
+        - 10.0.1.10:8042
+        - 10.0.2.70:8042
+
 # fortigate
   - job_name: 'MONITORING-Fortigate'
     scrape_interval: 60s

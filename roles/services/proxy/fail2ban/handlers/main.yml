@@ -1,0 +1,7 @@
+---
+# handlers file for nginx-configuration
+
+- name: Restart fail2ban service
+  ansible.builtin.service:
+    name: fail2ban
+    state: restarted

@@ -10,9 +10,14 @@
     path: "/home/{{ user_name }}/docker/bitwarden/bwdata"
     state: directory
 
-- name: Copy docker-compose file to target
-  copy:
-    src: "docker-compose.yml"
+- name: Create rclone folder
+  file:
+    path: "/home/{{ user_name }}/docker/bitwarden/rclone"
+    state: directory
+
+- name: Template docker-compose file to target
+  template:
+    src: "docker-compose.yml.j2"
     dest: "/home/{{ user_name }}/docker/bitwarden/docker-compose.yml"
 
 # rules & templates
@@ -21,6 +26,11 @@
   copy:
     src: nginx.conf
     dest: "/home/{{ user_name }}/docker/bitwarden/nginx.conf"
+
+- name: Template rclone config to target
+  template:
+    src: "rclone.conf.j2"
+    dest: "/home/{{ user_name }}/docker/bitwarden/rclone/rclone.conf"
 
 - name: Deploy bitwarden
   docker_compose:

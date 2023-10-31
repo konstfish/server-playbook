@@ -43,10 +43,10 @@
     dest: /etc/nginx/sites-enabled/bitwarden.konst.fish
   notify: Restart nginx service
 
-- name: Template api.sudoku.konst.fish configuration
+- name: Template api.konst.fish configuration
   template:
-    src: api.sudoku.konst.fish.j2
-    dest: /etc/nginx/sites-enabled/api.sudoku.konst.fish
+    src: api.konst.fish.j2
+    dest: /etc/nginx/sites-enabled/api.konst.fish
   notify: Restart nginx service
 
 - name: Copy .htpasswd

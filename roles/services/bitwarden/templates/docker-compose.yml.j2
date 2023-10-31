@@ -9,6 +9,16 @@ services:
       - SIGNUPS_ALLOWED=false
     restart: on-failure
 
+  backup:
+    image: ttionya/vaultwarden-backup:latest
+    restart: always
+    environment:
+      CRON: '15 * * * *'
+      ZIP_PASSWORD: '{{ bitwarden_zip_password }}'
+    volumes:
+      - ./bwdata:/bitwarden/data/
+      - ./rclone/:/config/rclone/
+
   nginx:
     image: nginx:1.15-alpine
     ports:
