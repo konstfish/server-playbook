@@ -128,24 +128,22 @@
     create: yes
 
 # docker
-- name: Change Docker Service
+- name: Open docker service on port 2375
   lineinfile: 
     path: /lib/systemd/system/docker.service
     regexp: '^(.*)ExecStart(.*)$' 
-    line: 'ExecStart=/usr/bin/dockerd -H fd:// -H tcp://0.0.0.0:2375 --containerd=/run/containerd/containerd.sock'
+    line: 'ExecStart=/usr/bin/dockerd --containerd=/run/containerd/containerd.sock --config-file /etc/docker/daemon.json'
     backrefs: yes
-  register: docker_change_result
+  notify: Restart Docker Service
 
-- name: Print variable
-  debug:
-    msg: "The value of the variable is {{ docker_change_result.changed }}"
-
-- name: Restart Docker Service
-  systemd:
-    name: "docker"
-    daemon_reload: yes
-    state: restarted
-  when: docker_change_result.changed
+- name: Configure Docker daemon with custom logging options
+  copy:
+    src: docker-daemon.json
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart Docker Service
 
 # nfs
 - name: Mount NFS Share

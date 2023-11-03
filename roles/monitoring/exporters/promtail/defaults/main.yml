@@ -1,0 +1,5 @@
+---
+# defaults file for proxmox-vm
+
+fortigate_exporter_targets:
+  fortigate_ip: key

@@ -5,15 +5,11 @@ services:
     container_name: jellyfin
     network_mode: "host"
     volumes:
-      - jellyfin_config:/config
-      - jellyfin_cache:/cache
-      - /stor/plex/shows:/media/tv
-      - /stor/plex/movies:/media/movies
-      - /stor/plex/anime:/media/anime
+      - /mnt/stor/plex/config/:/config
+      - /mnt/stor/plex/config/cache:/cache
+      - /mnt/stor/plex/shows:/media/tv
+      - /mnt/stor/plex/movies:/media/movies
+      - /mnt/stor/plex/anime:/media/anime
     restart: "unless-stopped"
     environment:
       - JELLYFIN_PublishedServerUrl=https://jellyfin.konst.fish
-
-volumes:
-  jellyfin_config:
-  jellyfin_cache:

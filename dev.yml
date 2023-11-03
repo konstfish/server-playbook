@@ -1,14 +1,7 @@
----
-
-- name: Web-remote
-  hosts: kf-orc-arm-01
+- name: Monitoring
+  hosts: kf-orc-arm-02
   serial: 10
   roles:
-    - services/proxy/fail2ban
-
-- name: Web-local
-  hosts: kf-opt-salmon-01
-  serial: 10
-  roles:
-    - services/proxy/fail2ban
-    
+    - setup/basic-setup
+    - monitoring/exporters/promtail
+    - monitoring/grafana-stack

@@ -1,25 +1,5 @@
 ---
 
-- name: Bitwarden
-  hosts: kf-orc-amd-02
-  serial: 10
-  roles:
-    - services/bitwarden
-
-#- name: Media
-#  hosts: kf-opt-salmon-01
-#  serial: 10
-#  roles:
-  #  - services/media/plex
-  #  - services/media/jellyfin
-
-
-- name: Medfish
-  hosts: kf-opt-tuna-01
-  serial: 10
-  roles:
-    - services/media/medfish
-
 - name: Oracle-pre
   hosts: oracle
   serial: 10
@@ -37,6 +17,22 @@
     - monitoring/exporters/cadvisor
     - bonsai/bonsai-exporter
 
+- name: Bitwarden
+  hosts: kf-orc-amd-02
+  roles:
+    - services/bitwarden
+
+- name: Media
+  hosts: kf-opt-salmon-01
+  roles:
+    - services/media/plex
+    - services/media/jellyfin
+
+- name: Medfish
+  hosts: kf-opt-tuna-01
+  roles:
+    - services/media/medfish
+
 - name: Monitoring-Bonsai
   hosts: kf-orc-arm-02
   serial: 10
@@ -47,14 +43,13 @@
   hosts: kf-orc-arm-02
   serial: 10
   roles:
+    - monitoring/portainer
     - monitoring/exporters/fortigate-exporter
     - monitoring/grafana-stack
 
-- name: Monitoring
+- name: Pocketbase
   hosts: kf-orc-arm-01
-  serial: 10
   roles:
-#    - monitoring/portainer
     - role: services/pocketbase
       pocketbase_name: "sudoku"
 

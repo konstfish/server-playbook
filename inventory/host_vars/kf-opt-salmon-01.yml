@@ -18,7 +18,7 @@ cloudflare_custom_record_list:
     type: CNAME
     value: konstfish.github.io
     proxied: true
-  - record: blog.konst.fish
+  - record: old.konst.fish
     type: CNAME
     value: konstfish.github.io
     proxied: true

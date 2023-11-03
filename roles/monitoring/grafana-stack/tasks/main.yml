@@ -21,6 +21,11 @@
     path: "/home/{{ user_name }}/docker/grafana-stack/alertmanager"
     state: directory
 
+- name: Create Loki config folder
+  file:
+    path: "/home/{{ user_name }}/docker/grafana-stack/loki"
+    state: directory
+
 - name: Create Grafana provisioning folder
   file:
     path: "/home/{{ user_name }}/docker/grafana-stack/grafana/provisioning"
@@ -47,6 +52,11 @@
   template:
     src: "alertmanager.yml.j2"
     dest: "/home/{{ user_name }}/docker/grafana-stack/alertmanager/config.yml"
+
+- name: Template Loki configuration
+  template:
+    src: "loki.yml.j2"
+    dest: "/home/{{ user_name }}/docker/grafana-stack/loki/loki.yml"
 
 - name: Deploy grafana-stack
   docker_compose:

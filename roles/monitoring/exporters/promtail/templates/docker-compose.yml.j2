@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  promtail:
+    image: grafana/promtail:latest
+    volumes:
+        - ./promtail.yml:/etc/promtail/promtail.yml
+        - ./positions.yml:/etc/promtail/positions.yml
+        - /var/log:/var/log
+        - /var/lib/docker/containers:/var/lib/docker/containers
+    command: -config.file=/etc/promtail/promtail.yml
+    resources:
+      limits:
+        cpus: '0.2'
+        memory: 100M
+      reservations:
+        cpus: '0.05'
+        memory: 50M

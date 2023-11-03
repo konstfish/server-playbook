@@ -44,31 +44,48 @@
   community.general.ufw:
     rule: allow
     src: 10.0.1.0/24
+  notify: Reload UFW
 
 - name: Allow all access from 10.0.2.0/24 subnet to host
   community.general.ufw:
     rule: allow
     src: 10.0.2.0/24
+  notify: Reload UFW
 
 # sudo iptables -I INPUT 1 -s 172.17.0.1/14 -j ACCEPT
 - name: Allow all access from docker containers
   community.general.ufw:
     rule: allow
     src: 172.17.0.1/12
-
+  notify: Reload UFW
+  
 # ports
 - name: Allow all access to port 22
   community.general.ufw:
     rule: allow
     port: '22'
     proto: tcp
-
+  notify: Reload UFW
+  
 - name: Allow all access to specified ports
   community.general.ufw:
     rule: allow
     port: '{{ item }}'
   loop: "{{ allow_ports | default([]) }}"
-
+  notify: Reload UFW
+  
+- name: Deny all incoming by default with UFW
+  community.general.ufw:
+    direction: incoming
+    policy: deny
+  notify: Reload UFW
+  
+- name: Allow all outgoing by default with UFW
+  community.general.ufw:
+    direction: outgoing
+    policy: allow
+  notify: Reload UFW
+  
 - name: Enable UFW
   community.general.ufw:
     state: enabled

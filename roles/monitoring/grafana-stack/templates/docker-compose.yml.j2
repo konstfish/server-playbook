@@ -1,8 +1,11 @@
 version: '3.9'
 
 volumes:
-    prometheus_data: {}
-    grafana_data: {}
+    prometheus_data:
+    loki_data:
+      storage_opt:
+        size: '6G'
+    grafana_data:
 
 services:
 
@@ -20,6 +23,7 @@ services:
       - "3000:3000"
     links: 
       - prometheus
+      - loki
       - alertmanager
     labels:
       org.label-schema.group: "monitoring"
@@ -47,6 +51,18 @@ services:
       - fortigate_exporter
     labels:
       org.label-schema.group: "monitoring"
+
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/loki.yml
+    links: 
+      - alertmanager
+    restart: unless-stopped
+    volumes:
+      - ./loki:/etc/loki
+      - loki_data:/loki
 
   alertmanager:
     image: prom/alertmanager:latest
