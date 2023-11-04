@@ -8,22 +8,36 @@ positions:
 clients:
   - url: 'http://10.0.2.71:3100/loki/api/v1/push'
 
+limits_config:
+  readline_rate: 1000
+  readline_burst: 2000
+  readline_rate_enabled: true
+
 scrape_configs:
   - job_name: system
     static_configs:
     - targets:
         - "{{ inventory_hostname }}"
       labels:
-        job: var-logs
+        job: syslog
         host: "{{ inventory_hostname }}"
-        __path__: /var/log/*log
+        __path__: /var/log/syslog
+
+  - job_name: auth
+    static_configs:
+      - targets:
+          - "{{ inventory_hostname }}"
+        labels:
+          job: authlog
+          host: "{{ inventory_hostname }}"
+          __path__: /var/log/auth.log
 
   - job_name: containers
     static_configs:
     - targets:
         - "{{ inventory_hostname }}"
       labels:
-        job: container-logs
+        job: containerlog
         host: "{{ inventory_hostname }}"
         __path__: /var/lib/docker/containers/*/*log
 
@@ -61,7 +75,16 @@ scrape_configs:
       - targets:
           - "{{ inventory_hostname }}"
         labels:
-          job: nginx-logs
+          job: nginxlog
           host: "{{ inventory_hostname }}"
           __path__: /var/log/nginx/*.log
+
+  - job_name: fail2ban
+    static_configs:
+      - targets:
+          - "{{ inventory_hostname }}"
+        labels:
+          job: fail2banlog
+          host: "{{ inventory_hostname }}"
+          __path__: /var/log/fail2ban.log
 {% endif %}

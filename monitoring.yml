@@ -4,15 +4,15 @@
   hosts: all
   serial: 10
   roles:
-#    - cloudalchemy.node_exporter
-#    - monitoring/exporters/cadvisor
+    - cloudalchemy.node_exporter
+    - monitoring/exporters/cadvisor
     - setup/basic-setup
     - monitoring/exporters/promtail
-#    - bonsai/bonsai-exporter
+    - bonsai/bonsai-exporter
 
 - name: Monitoring
   hosts: kf-orc-arm-02
   serial: 10
   roles:
-  #  - monitoring/exporters/fortigate-exporter
+    - monitoring/exporters/fortigate-exporter
     - monitoring/grafana-stack

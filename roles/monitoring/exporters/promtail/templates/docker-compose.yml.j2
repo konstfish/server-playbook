@@ -9,11 +9,22 @@ services:
         - /var/log:/var/log
         - /var/lib/docker/containers:/var/lib/docker/containers
     command: -config.file=/etc/promtail/promtail.yml
+    restart: unless-stopped
     deploy:
+{% if ansible_hostname.startswith('kf-orc-amd-') %}
         resources:
             limits:
                 cpus: '0.3'
-                memory: 400M
+                memory: 200M
             reservations:
                 cpus: '0.1'
                 memory: 100M
+{% else %}
+        resources:
+            limits:
+                cpus: '0.3'
+                memory: 700M
+            reservations:
+                cpus: '0.1'
+                memory: 100M
+{% endif %}

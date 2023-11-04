@@ -124,14 +124,14 @@ groups:
 #      summary: Host high CPU load (instance {{ $labels.instance }})
 #      description: "CPU load is > 80%\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
-  - alert: HostCpuStealNoisyNeighbor
-    expr: avg by(instance) (rate(node_cpu_seconds_total{mode="steal"}[5m])) * 100 > 10
-    for: 0m
-    labels:
-      severity: warning
-    annotations:
-      summary: Host CPU steal noisy neighbor (instance {{ $labels.instance }})
-      description: "CPU steal is > 10%. A noisy neighbor is killing VM performances or a spot instance may be out of credit.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+#  - alert: HostCpuStealNoisyNeighbor
+#    expr: avg by(instance) (rate(node_cpu_seconds_total{mode="steal"}[5m])) * 100 > 10
+#    for: 0m
+#    labels:
+#      severity: warning
+#    annotations:
+#      summary: Host CPU steal noisy neighbor (instance {{ $labels.instance }})
+#      description: "CPU steal is > 10%. A noisy neighbor is killing VM performances or a spot instance may be out of credit.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
   - alert: HostCpuHighIowait
     expr: avg by (instance) (rate(node_cpu_seconds_total{mode="iowait", instance!~"kf-opt.*:9100"}[5m])) * 100 > 5

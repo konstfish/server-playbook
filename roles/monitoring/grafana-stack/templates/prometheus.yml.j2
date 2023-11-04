@@ -42,8 +42,9 @@ scrape_configs:
 #% for host in blackbox_http_monitoring_nodes %}
 #        - '{ host }}'
 #% endfor %}
+        - 'https://api.konst.fish'
         - 'https://grafana.konst.fish'
-        - 'https://backend.works'
+        - 'https://sudokuharbor.com'
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
@@ -123,12 +124,12 @@ scrape_configs:
         - nginx_exporter_remote:9113
 
 # fail2ban
-  - job_name: 'MONITORING-fail2ban'
-    scrape_interval: 30s
-    static_configs:
-      - targets: 
-        - 10.0.1.10:8042
-        - 10.0.2.70:8042
+#  - job_name: 'MONITORING-fail2ban'
+#    scrape_interval: 30s
+#    static_configs:
+#      - targets: 
+#        - 10.0.1.10:8042
+#        - 10.0.2.70:8042
 
 # fortigate
   - job_name: 'MONITORING-Fortigate'
