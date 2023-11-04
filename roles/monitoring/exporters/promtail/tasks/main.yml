@@ -5,6 +5,11 @@
     path: "/home/{{ user_name }}/docker/exporters/promtail"
     state: directory
 
+- name: Create promtail tmp folder
+  file:
+    path: "/home/{{ user_name }}/docker/exporters/promtail/tmp"
+    state: directory
+
 - name: Template docker-compose file
   template:
     src: "docker-compose.yml.j2"
@@ -19,12 +24,6 @@
   template:
     src: promtail.yml.j2
     dest: "/home/{{ user_name }}/docker/exporters/promtail/promtail.yml"
-
-- name: Touch positions yml
-  ansible.builtin.file:
-    path: "/home/{{ user_name }}/docker/exporters/promtail/positions.yml"
-    state: touch
-    mode: '0644'
 
 - name: Deploy promtail
   docker_compose:

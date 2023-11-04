@@ -3,7 +3,7 @@ server:
   grpc_listen_port: 0
 
 positions:
-  filename: /etc/promtail/positions.yml
+  filename: /tmp/positions.yml
 
 clients:
   - url: 'http://10.0.2.71:3100/loki/api/v1/push'
@@ -15,6 +15,7 @@ scrape_configs:
         - "{{ inventory_hostname }}"
       labels:
         job: var-logs
+        host: "{{ inventory_hostname }}"
         __path__: /var/log/*log
 
   - job_name: containers
@@ -23,33 +24,36 @@ scrape_configs:
         - "{{ inventory_hostname }}"
       labels:
         job: container-logs
+        host: "{{ inventory_hostname }}"
         __path__: /var/lib/docker/containers/*/*log
 
     pipeline_stages:
     - json:
         expressions:
-          output: log
+          log: log
           stream: stream
-          attrs:
-    - json:
-        expressions:
-          tag:
-        source: attrs
+          time: time
+          tag: attrs.tag
+          container_name: attrs.container_name
+          compose_project: attrs."com.docker.compose.project"
+          compose_service: attrs."com.docker.compose.service"
+          stack_name: attrs."com.docker.stack.namespace"
     - regex:
-        expression: (?P<image_name>(?:[^|]*[^|])).(?P<container_name>(?:[^|]*[^|])).(?P<image_id>(?:[^|]*[^|])).(?P<container_id>(?:[^|]*[^|]))
-        source: tag
+        expression: "^/var/lib/docker/containers/(?P<container_id>.{12}).+/.+-json.log$"
+        source: filename
     - timestamp:
         format: RFC3339Nano
         source: time
     - labels:
-        tag:
         stream:
-        image_name:
-        container_name:
-        image_id:
         container_id:
+        tag:
+        container_name:
+        compose_project:
+        compose_service:
+        stack_name:
     - output:
-        source: output
+        source: log
 
 {% if nginx_access_log.stat.exists %}
   - job_name: nginx
@@ -58,5 +62,6 @@ scrape_configs:
           - "{{ inventory_hostname }}"
         labels:
           job: nginx-logs
+          host: "{{ inventory_hostname }}"
           __path__: /var/log/nginx/*.log
 {% endif %}

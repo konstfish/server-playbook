@@ -5,14 +5,15 @@ services:
     image: grafana/promtail:latest
     volumes:
         - ./promtail.yml:/etc/promtail/promtail.yml
-        - ./positions.yml:/etc/promtail/positions.yml
+        - ./tmp:/tmp
         - /var/log:/var/log
         - /var/lib/docker/containers:/var/lib/docker/containers
     command: -config.file=/etc/promtail/promtail.yml
-    resources:
-      limits:
-        cpus: '0.2'
-        memory: 100M
-      reservations:
-        cpus: '0.05'
-        memory: 50M
+    deploy:
+        resources:
+            limits:
+                cpus: '0.3'
+                memory: 400M
+            reservations:
+                cpus: '0.1'
+                memory: 100M

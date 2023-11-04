@@ -1,7 +1,6 @@
-- name: Monitoring
-  hosts: kf-orc-arm-02
+
+- name: Main
+  hosts: all
   serial: 10
   roles:
-    - setup/basic-setup
     - monitoring/exporters/promtail
-    - monitoring/grafana-stack

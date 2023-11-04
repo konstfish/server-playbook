@@ -3,8 +3,10 @@ version: '3.9'
 volumes:
     prometheus_data:
     loki_data:
-      storage_opt:
-        size: '6G'
+      driver_opts:
+        o: "size=6000m"
+        device: tmpfs
+        type: tmpfs
     grafana_data:
 
 services:
