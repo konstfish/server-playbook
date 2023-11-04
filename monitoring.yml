@@ -8,7 +8,7 @@
     - monitoring/exporters/cadvisor
     - setup/basic-setup
     - monitoring/exporters/promtail
-    - bonsai/bonsai-exporter
+    - monitoring/bonsai/bonsai-exporter
 
 - name: Monitoring
   hosts: kf-orc-arm-02
@@ -16,3 +16,4 @@
   roles:
     - monitoring/exporters/fortigate-exporter
     - monitoring/grafana-stack
+    - monitoring/bonsai/bonsai-stack

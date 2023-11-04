@@ -15,7 +15,7 @@
 
     - cloudalchemy.node_exporter
     - monitoring/exporters/cadvisor
-    - bonsai/bonsai-exporter
+    - monitoring/bonsai/bonsai-exporter
 
 - name: Bitwarden
   hosts: kf-orc-amd-02
@@ -37,7 +37,7 @@
   hosts: kf-orc-arm-02
   serial: 10
   roles:
-    - bonsai/bonsai-stack
+    - monitoring/bonsai/bonsai-stack
 
 - name: Monitoring
   hosts: kf-orc-arm-02

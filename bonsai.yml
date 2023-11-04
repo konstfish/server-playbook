@@ -4,10 +4,10 @@
   hosts: kf-orc-arm-02
   serial: 10
   roles:
-    - bonsai/bonsai-stack
+    - monitoring/bonsai/bonsai-stack
 
 - name: Bonsai-Exporter
   hosts: all
   serial: 10
   roles:
-    - bonsai/bonsai-exporter
+    - monitoring/bonsai/bonsai-exporter
