@@ -39,6 +39,19 @@ services:
       - 9117:9117
     restart: unless-stopped
 
+  prowlarr:
+    image: linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - prowlarr_config:/config
+    ports:
+      - 9696:9696
+    restart: unless-stopped
+
   sonarr:
     image: linuxserver/sonarr:latest
     environment:
@@ -53,6 +66,8 @@ services:
       - /stor/transmission/completed:/data/completed
     ports:
       - 8989:8989
+    links:
+      - prowlarr
     restart: unless-stopped
 
   radarr:
@@ -68,9 +83,12 @@ services:
       - /stor/transmission/completed:/data/completed
     ports:
       - 7878:7878
+    links:
+      - prowlarr
     restart: unless-stopped
 
 volumes:
+  prowlarr_config:
   jackett_config:
   jackett_downloads:
   sonarr_config:

@@ -1,5 +1,4 @@
-- name: Monitoring
-  hosts: kf-orc-arm-02
-  serial: 10
+- name: Medfish
+  hosts: kf-opt-tuna-01
   roles:
-    - monitoring/grafana-stack
+    - services/media/medfish
