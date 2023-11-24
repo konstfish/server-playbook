@@ -33,12 +33,6 @@
   roles:
     - services/media/medfish
 
-- name: Monitoring-Bonsai
-  hosts: kf-orc-arm-02
-  serial: 10
-  roles:
-    - monitoring/bonsai/bonsai-stack
-
 - name: Monitoring
   hosts: kf-orc-arm-02
   serial: 10
@@ -46,6 +40,8 @@
     - monitoring/portainer
     - monitoring/exporters/fortigate-exporter
     - monitoring/grafana-stack
+
+    - monitoring/bonsai/bonsai-stack
 
 - name: Pocketbase
   hosts: kf-orc-arm-01

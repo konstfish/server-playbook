@@ -1,20 +1,9 @@
 ---
 
-- name: Get updated files from git repository 
-  git: 
-    repo: "https://{{ github_user | urlencode }}:{{ github_token | urlencode }}@github.com/konstfish/bonsai.git"
-    dest: /home/{{ user_name }}/docker/bonsai-clone
-
-- name: Delete old directory
+- name: Create bonsai directory
   file:
-    state: absent
     path: /home/{{ user_name }}/docker/bonsai
-
-- name: Copy cloned repo 
-  ansible.builtin.copy:
-    src: /home/{{ user_name }}/docker/bonsai-clone/
-    dest: /home/{{ user_name }}/docker/bonsai/
-    remote_src: true
+    state: directory
 
 - name: Template docker-compose file
   template:
@@ -24,8 +13,5 @@
 - name: Deploy bonsai stack
   docker_compose:
     project_src: /home/{{ user_name }}/docker/bonsai
+    pull: true
     state: present
-    build: true
-    nocache: true
-    restarted: true
-    recreate: always

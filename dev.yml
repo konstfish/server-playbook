@@ -1,13 +1,6 @@
-- name: Web-remote
-  hosts: kf-orc-arm-01
-  serial: 10
-  roles:
-    - services/proxy/cloudflare-dns
-    - services/proxy/nginx-remote
-    - services/streaks-api
 
-- name: Main
-  hosts: all
+- name: Monitoring
+  hosts: kf-orc-arm-02
   serial: 10
   roles:
-    - monitoring/bonsai/bonsai-exporter
+    - monitoring/bonsai/bonsai-stack
