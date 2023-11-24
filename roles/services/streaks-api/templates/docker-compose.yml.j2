@@ -1,0 +1,14 @@
+version: '3.7'
+services:
+  streaks_api:
+    image: ghcr.io/konstfish/streaks-api:latest
+    ports:
+      - 4000:4000
+    volumes:
+      - streaks_data:/opt/data
+    environment:
+      - REQ_KEY=MTIzNGFzZGYxMjM0Cg
+    restart: always
+
+volumes:
+  streaks_data:

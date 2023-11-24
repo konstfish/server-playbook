@@ -4,6 +4,9 @@ install:
 deploy:
 	ansible-playbook -i inventory/hosts.yml -b install.yml
 	
+test:
+	ansible-playbook --check -i inventory/hosts.yml -b install.yml
+
 dev:
 	ansible-playbook -i inventory/hosts.yml -b dev.yml
 

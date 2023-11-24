@@ -9,6 +9,8 @@ cloudflare_record_list:
     proxied: false
   - record: grafana.konst.fish
     proxied: false
+  - record: obsidian.konst.fish
+    proxied: false
   - record: harbor.konst.fish
     proxied: false
   - record: nfc.konst.fish

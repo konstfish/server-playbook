@@ -22,11 +22,11 @@
   roles:
     - services/bitwarden
 
-- name: Media
-  hosts: kf-opt-salmon-01
-  roles:
-    - services/media/plex
-    - services/media/jellyfin
+#- name: Media
+#  hosts: kf-opt-salmon-01
+#  roles:
+#    - services/media/plex
+#    - services/media/jellyfin
 
 - name: Medfish
   hosts: kf-opt-tuna-01
@@ -61,6 +61,8 @@
     - services/proxy/certbot
     - services/proxy/fail2ban
     - services/proxy/nginx-remote
+    - services/streaks-api
+
 
 - name: Web-local
   hosts: kf-opt-salmon-01
@@ -69,4 +71,3 @@
     - services/proxy/cloudflare-dns
     - services/proxy/nginx-local
     - services/proxy/fail2ban
-    - services/streaks-api

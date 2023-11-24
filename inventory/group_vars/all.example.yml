@@ -1,19 +1,21 @@
 # ansible
 ansible_user: ubuntu
 ansible_ssh_private_key_file: /Users/david/.ssh/id_ansible
-
 # setup
 user_name: david
 github_user: konstfish
+github_token: xxx
 
 # docker
 docker_install_compose: true
 docker_compose_version: "v2.23.0"
 
 # cloudflare
+cloudflare_zone: konst.fish
 cloudflare_api_key: xxx
+cloudflare_account_email: xxx
 letsencrypt_email: xxx
-fqdn: xxx
+fqdn: konst.fish
 
 # grafana
 grafana_admin_password: xxx
@@ -24,8 +26,15 @@ alertmanager_telegram_chatid: xxx
 
 # fortigate exporter
 fortigate_exporter_targets:
-  https://fortigate: xxx
+  https://10.0.1.254: xxx
 
 # nordvpn (for medfish)
 nordvpn_user: xxx
 nordvpn_password: xxx
+
+# oracle cloud
+oci_access_key_id: xxx
+oci_secret_access_key: xxx
+
+# bitwarden backup
+bitwarden_zip_password: xxx

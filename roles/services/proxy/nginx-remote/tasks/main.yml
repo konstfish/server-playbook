@@ -43,6 +43,12 @@
     dest: /etc/nginx/sites-enabled/bitwarden.konst.fish
   notify: Restart nginx service
 
+- name: Template obsidian.konst.fish configuration
+  template:
+    src: obsidian.konst.fish.j2
+    dest: /etc/nginx/sites-enabled/obsidian.konst.fish
+  notify: Restart nginx service
+
 - name: Template api.konst.fish configuration
   template:
     src: api.konst.fish.j2
