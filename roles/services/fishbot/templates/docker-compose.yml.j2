@@ -1,0 +1,9 @@
+version: '3.7'
+services:
+  fishbot:
+    image: ghcr.io/konstfish/fishbot:latest
+    volumes:
+      - ./db:/db
+    environment:
+      - DISCORD_TOKEN={{ fishbot_discord_token }}
+    restart: always

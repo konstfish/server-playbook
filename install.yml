@@ -48,6 +48,7 @@
   roles:
     - role: services/pocketbase
       pocketbase_name: "sudoku"
+    - services/fishbot
 
 - name: Web-remote
   hosts: kf-orc-arm-01

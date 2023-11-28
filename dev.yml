@@ -1,6 +1,4 @@
-
-- name: Monitoring
-  hosts: kf-orc-arm-02
-  serial: 10
+- name: Pocketbase
+  hosts: kf-orc-arm-01
   roles:
-    - monitoring/bonsai/bonsai-stack
+    - services/fishbot

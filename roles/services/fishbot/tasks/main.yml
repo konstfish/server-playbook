@@ -1,0 +1,22 @@
+---
+# tasks file for bitwarden
+- name: Create fishbot folder
+  file:
+    path: "/home/{{ user_name }}/docker/fishbot"
+    state: directory
+
+- name: Create db folder
+  file:
+    path: "/home/{{ user_name }}/docker/fishbot/db"
+    state: directory
+
+- name: Template docker-compose file to target
+  template:
+    src: "docker-compose.yml.j2"
+    dest: "/home/{{ user_name }}/docker/fishbot/docker-compose.yml"
+
+- name: Deploy fishbot
+  docker_compose:
+    project_src: /home/{{ user_name }}/docker/fishbot
+    state: present
+    pull: true
