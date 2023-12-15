@@ -55,6 +55,12 @@
     dest: /etc/nginx/sites-enabled/api.konst.fish
   notify: Restart nginx service
 
+- name: Template ghostfolio.konst.fish configuration
+  template:
+    src: ghostfolio.konst.fish.j2
+    dest: /etc/nginx/sites-enabled/ghostfolio.konst.fish
+  notify: Restart nginx service
+
 - name: Copy .htpasswd
   copy:
     src: .htpasswd

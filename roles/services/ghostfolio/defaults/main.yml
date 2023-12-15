@@ -1,0 +1,10 @@
+---
+# defaults file for nginx-configuration
+
+ghostfolio_redis_password: "redis"
+
+ghostfolio_postgres_password: "postgres"
+
+ghostfolio_access_token_salt: "token"
+
+ghostfolio_jwt_secret_key: "salt"

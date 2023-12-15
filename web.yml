@@ -6,7 +6,7 @@
   roles:
     - services/proxy/cloudflare-dns
     - services/proxy/certbot
-    - services/proxy/fail2ban
+    #- services/proxy/fail2ban
     - services/proxy/nginx-remote
 
 - name: Web-local
@@ -15,6 +15,6 @@
   roles:
     - services/proxy/cloudflare-dns
     - services/proxy/nginx-local
-    - services/proxy/fail2ban
+    #- services/proxy/fail2ban
     #- services/streaks-api
     

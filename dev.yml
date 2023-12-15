@@ -1,4 +1,4 @@
-- name: Pocketbase
-  hosts: kf-orc-arm-01
+- name: Ghostfolio
+  hosts: kf-orc-amd-01
   roles:
-    - services/fishbot
+    - services/ghostfolio

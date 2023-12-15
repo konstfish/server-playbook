@@ -39,7 +39,7 @@
     command: certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.ini --email '{{ letsencrypt_email }}' --domain '*.{{ fqdn }}' --agree-tos --non-interactive
   vars:
     expire_days: "{{ (( cert.not_after | to_datetime('%Y%m%d%H%M%SZ')) - (ansible_date_time.iso8601 | to_datetime('%Y-%m-%dT%H:%M:%SZ')) ).days }}"
-  when: expire_days|int < 15
+  when: expire_days|int < 24
   notify: Restart nginx service
 
 - name: Fetch letsencrypt cert to local

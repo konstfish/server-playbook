@@ -22,6 +22,11 @@
   roles:
     - services/bitwarden
 
+- name: Ghostfolio
+  hosts: kf-orc-amd-01
+  roles:
+    - services/ghostfolio
+
 #- name: Media
 #  hosts: kf-opt-salmon-01
 #  roles:
