@@ -20,3 +20,7 @@ cloudflare_custom_record_list:
     type: CNAME
     value: konstfish.github.io
     proxied: true
+  - record: components.konst.fish
+    type: CNAME
+    value: konstfish.github.io
+    proxied: true
